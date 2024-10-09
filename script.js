@@ -25,6 +25,10 @@ const setOfWords = [{
     }
 ]
 
+const studyCards = document.querySelector('.study-cards');
+const examCards = document.querySelector('#exam-cards');
+const studyMode = document.querySelector('#study-mode');
+const examMode = document.querySelector('#exam-mode');
 const flipCard = document.querySelector('.flip-card');
 const cardFront = document.querySelector('#card-front');
 const wordCardFront = cardFront.querySelector('h1');
@@ -67,6 +71,7 @@ buttonControl.forEach(btn => {
                 i = 4;
             }
         }
+
         if (event.target.id === 'back') {
 
             i--;
@@ -83,5 +88,101 @@ buttonControl.forEach(btn => {
             }
         }
 
+        if (event.target.id === 'exam') {
+            studyCards.classList.add('hidden');
+            studyMode.classList.add('hidden');
+            examMode.classList.remove('hidden');
+            createElement();
+        }
+
     })
 });
+
+
+function shuffle(array) { /*перемешивание элементов*/
+    array.sort(() => Math.random() - 0.5);
+    return array;
+}
+
+function createElement() {
+
+    const wordsRus = [];
+    const wordsEng = [];
+
+    setOfWords.forEach((word) => {
+        wordsRus.push(word.cardBack);
+    })
+
+    setOfWords.forEach((word) => {
+        wordsEng.push(word.cardFront);
+    })
+
+    const mixWords = shuffle(wordsRus.concat(wordsEng));
+
+    mixWords.forEach((word) => {
+        const element = document.createElement("span");
+        element.classList.add('card');
+        element.textContent = word;
+        examCards.append(element);
+    });
+
+    const cardChoice = document.querySelectorAll(".card");
+    let clickCount = 0;
+    let wordCount = 0;
+
+    let firstChoise;
+    let firstIndexOf;
+    let secondChoise;
+    let secondIndexOf;
+
+    cardChoice.forEach(btn => {
+
+        btn.addEventListener('click', () => {
+            clickCount++;
+
+            if (clickCount === 1) {
+                btn.classList.add('correct');
+                firstChoise = btn.textContent;
+                firstIndexOf = wordsRus.indexOf(firstChoise);
+                if (firstIndexOf < 0) {
+                    firstIndexOf = wordsEng.indexOf(firstChoise);
+                }
+            }
+
+            if (clickCount > 1) {
+                secondChoise = btn.textContent;
+                secondIndexOf = wordsEng.indexOf(secondChoise);
+                if (secondIndexOf < 0) {
+                    secondIndexOf = wordsRus.indexOf(secondChoise);
+                }
+
+
+                if (firstIndexOf === secondIndexOf) {
+                    btn.classList.add('correct');
+                    cardChoice.forEach(btnIn => {
+                        if (btnIn.classList.contains('correct')) {
+                            btnIn.classList.add('fade-out');
+                            clickCount = 0;
+                        }
+                    })
+                    wordCount++;
+                } else {
+                    btn.classList.add('wrong');
+                    setTimeout(() => {
+                        cardChoice.forEach(btnIn => {
+                            if (btnIn.classList.contains('correct') || btnIn.classList.contains('wrong')) {
+                                btnIn.classList.remove('correct');
+                                btnIn.classList.remove('wrong');
+                                clickCount = 0;
+                            }
+                        })
+                    }, 1000);
+                }
+            }
+            if (wordCount === 5) {
+                alert('Поздравляю с успешным завершением задания!')
+            }
+        })
+
+    })
+}
