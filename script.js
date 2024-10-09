@@ -157,7 +157,7 @@ function createElement() {
                 }
 
 
-                if (firstIndexOf === secondIndexOf) {
+                if (firstIndexOf === secondIndexOf && firstChoise !== secondChoise) {
                     btn.classList.add('correct');
                     cardChoice.forEach(btnIn => {
                         if (btnIn.classList.contains('correct')) {
