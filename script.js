@@ -1,17 +1,3 @@
-const flipCard = document.querySelector('.flip-card');
-const cardFront = document.querySelector('#card-front');
-const wordCardFront = cardFront.querySelector('h1');
-const cardBack = document.querySelector('#card-back');
-const wordCardBack = cardBack.querySelector('h1');
-const example = cardBack.querySelector('span');
-
-const currentWord = document.querySelector('#current-word');
-
-const buttons = document.querySelector('.slider-controls');
-const buttonControl = buttons.querySelectorAll('button');
-const buttonNext = document.querySelector('#next');
-const buttonBack = document.querySelector('#back');
-
 const setOfWords = [{
         cardFront: "apple",
         cardBack: "яблоко",
@@ -39,6 +25,20 @@ const setOfWords = [{
     }
 ]
 
+const flipCard = document.querySelector('.flip-card');
+const cardFront = document.querySelector('#card-front');
+const wordCardFront = cardFront.querySelector('h1');
+const cardBack = document.querySelector('#card-back');
+const wordCardBack = cardBack.querySelector('h1');
+const example = cardBack.querySelector('span');
+
+const currentWord = document.querySelector('#current-word');
+
+const buttons = document.querySelector('.slider-controls');
+const buttonControl = buttons.querySelectorAll('button');
+const buttonNext = document.querySelector('#next');
+const buttonBack = document.querySelector('#back');
+
 flipCard.addEventListener('click', () => {
     flipCard.classList.toggle('active');
 })
@@ -47,8 +47,7 @@ wordCardFront.textContent = setOfWords[0].cardFront;
 wordCardBack.textContent = setOfWords[0].cardBack;
 example.textContent = setOfWords[0].example;
 
-let i = 1;
-
+let i = 0;
 
 buttonControl.forEach(btn => {
     btn.addEventListener('click', (event) => {
@@ -56,37 +55,33 @@ buttonControl.forEach(btn => {
         if (event.target.id === 'next') {
             buttonBack.removeAttribute("disabled");
 
+            i++;
+            currentWord.textContent = i + 1;
+
             wordCardFront.textContent = setOfWords[i].cardFront;
             wordCardBack.textContent = setOfWords[i].cardBack;
             example.textContent = setOfWords[i].example;
 
-            i++;
-
-            currentWord.textContent = i;
-
-            if (i === 5) {
+            if (i === 4) {
                 event.target.setAttribute("disabled", "true");
-                i = 3;
+                i = 4;
             }
         }
         if (event.target.id === 'back') {
+
+            i--;
+            currentWord.textContent = i + 1;
 
             buttonNext.removeAttribute("disabled");
             wordCardFront.textContent = setOfWords[i].cardFront;
             wordCardBack.textContent = setOfWords[i].cardBack;
             example.textContent = setOfWords[i].example;
 
-            currentWord.textContent = i + 1;
-
             if (i === 0) {
                 event.target.setAttribute("disabled", "true");
-                i = 3;
+                i = 0;
             }
-
-            i--;
-
         }
-
 
     })
 });
