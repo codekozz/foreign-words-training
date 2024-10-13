@@ -138,51 +138,50 @@ function createElement() {
     cardChoice.forEach(btn => {
 
         btn.addEventListener('click', () => {
-            clickCount++;
-
-            if (clickCount === 1) {
-                btn.classList.add('correct');
-                firstChoise = btn.textContent;
-                firstIndexOf = wordsRus.indexOf(firstChoise);
-                if (firstIndexOf < 0) {
-                    firstIndexOf = wordsEng.indexOf(firstChoise);
-                }
-            }
-
-            if (clickCount > 1) {
-                secondChoise = btn.textContent;
-                secondIndexOf = wordsEng.indexOf(secondChoise);
-                if (secondIndexOf < 0) {
-                    secondIndexOf = wordsRus.indexOf(secondChoise);
-                }
-
-
-                if (firstIndexOf === secondIndexOf && firstChoise !== secondChoise) {
+            if (!btn.classList.contains('fade-out')) {
+                clickCount++;
+                if (clickCount === 1) {
                     btn.classList.add('correct');
-                    cardChoice.forEach(btnIn => {
-                        if (btnIn.classList.contains('correct')) {
-                            btnIn.classList.add('fade-out');
-                            clickCount = 0;
-                        }
-                    })
-                    wordCount++;
-                } else {
-                    btn.classList.add('wrong');
-                    setTimeout(() => {
+                    firstChoise = btn.textContent;
+                    firstIndexOf = wordsRus.indexOf(firstChoise);
+                    if (firstIndexOf < 0) {
+                        firstIndexOf = wordsEng.indexOf(firstChoise);
+                    }
+                }
+                if (clickCount > 1) {
+                    secondChoise = btn.textContent;
+                    secondIndexOf = wordsEng.indexOf(secondChoise);
+                    if (secondIndexOf < 0) {
+                        secondIndexOf = wordsRus.indexOf(secondChoise);
+                    }
+                    if (firstIndexOf === secondIndexOf && firstChoise !== secondChoise) {
+                        btn.classList.add('correct');
                         cardChoice.forEach(btnIn => {
-                            if (btnIn.classList.contains('correct') || btnIn.classList.contains('wrong')) {
-                                btnIn.classList.remove('correct');
-                                btnIn.classList.remove('wrong');
+                            if (btnIn.classList.contains('correct')) {
+                                btnIn.classList.add('fade-out');
                                 clickCount = 0;
                             }
                         })
+                        wordCount++;
+                    } else {
+                        btn.classList.add('wrong');
+                        setTimeout(() => {
+                            cardChoice.forEach(btnIn => {
+                                if (btnIn.classList.contains('correct') || btnIn.classList.contains('wrong')) {
+                                    btnIn.classList.remove('correct');
+                                    btnIn.classList.remove('wrong');
+                                    clickCount = 0;
+                                }
+                            })
+                        }, 1000);
+                    }
+                }
+                if (wordCount === 5) {
+                    setTimeout(() => {
+                        alert('Поздравляю с успешным завершением задания!');
                     }, 1000);
                 }
             }
-            if (wordCount === 5) {
-                alert('Поздравляю с успешным завершением задания!')
-            }
         })
-
     })
 }
